@@ -4,10 +4,10 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
-  context: { params: { shortId: string } }
+  context: { params: Promise<{ shortId: string }> }
 ) {
   try {
-    const { shortId } = context.params;
+    const { shortId } = await context.params;
 
     if (!shortId) {
       return NextResponse.json({ error: "Invalid shortId" }, { status: 400 });
