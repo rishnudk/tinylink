@@ -6,6 +6,8 @@ export async function GET(
   req: Request,
   context: { params: Promise<{ shortId: string }> }
 ) {
+  let originalUrl: string | null = null;
+
   try {
     const { shortId } = await context.params;
 
@@ -34,8 +36,8 @@ export async function GET(
       },
     });
 
-    // 3. Redirect to the original URL
-    return redirect(record.originalUrl);
+    // Store URL for redirection outside try/catch
+    originalUrl = record.originalUrl;
   } catch (err) {
     console.error("Redirect Error:", err);
 
@@ -43,5 +45,10 @@ export async function GET(
       { error: "Internal Server Error" },
       { status: 500 }
     );
+  }
+
+  // 3. Redirect to the original URL
+  if (originalUrl) {
+    redirect(originalUrl);
   }
 }
