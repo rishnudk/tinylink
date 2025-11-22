@@ -6,7 +6,7 @@ import { getSessionId } from "@/lib/session";
 
 export async function GET() {
     try {
-        const sessionId =  getSessionId();
+        const sessionId = await getSessionId();
 
         const links = await prisma.url.findMany({
             where: { sessionId},
