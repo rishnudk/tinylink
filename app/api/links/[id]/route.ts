@@ -42,15 +42,12 @@ export async function DELETE(
     const sessionId = await getSessionId();
     const { id } = await context.params;
 
-    console.log("🔍 [Delete API] Deleting link with id:", id);
-
     // Verify that this link belongs to the current user
     const link = await prisma.url.findFirst({
       where: { id, sessionId },
     });
 
     if (!link) {
-      console.log("❌ [Delete API] Link not found or unauthorized");
       return NextResponse.json(
         { error: "Link not found or unauthorized" },
         { status: 404 }
@@ -60,8 +57,6 @@ export async function DELETE(
     await prisma.url.delete({
       where: { id },
     });
-
-    console.log("✅ [Delete API] Link deleted successfully");
 
     return NextResponse.json({
       success: true,
